@@ -1,5 +1,7 @@
 # Ex.No: 02 LINEAR AND POLYNOMIAL TREND ESTIMATION
-Date:
+Developed by:Mathiyazhagan A
+Reg no:212222240063
+Date:23.08.24
 ### AIM:
 To Implement Linear and Polynomial Trend Estiamtion Using Python.
 
@@ -14,86 +16,64 @@ Calculate the polynomial trend values using least square method
 
 End the program
 ### PROGRAM:
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+df = pd.read_csv('/content/seattle_weather_1948-2017.csv')
+df['DATE'] = pd.to_datetime(df['DATE'], errors='coerce')
+df = df.dropna(subset=['PRCP'])
+df['Date_ordinal'] = df['DATE'].apply(lambda x: x.toordinal())
+X = df['Date_ordinal'].values.reshape(-1, 1)
+y = df['PRCP'].values
+print(df.columns)
+```
 A - LINEAR TREND ESTIMATION
 ```
 #Trend equation using Linear Equation
-
-import numpy as np
-from tabulate import tabulate
-x = list(map(int, input("Enter a list of years").split()))
-y = list(map(int, input("Enter a list of observation").split()))
-# x = [2010, 2012, 2014, 2016, 2018]
-# y = [18, 21, 23,27,16]
-X = [i - x[len(x)//2] for i in x] 
-x2 = [i ** 2 for i in X]
-xy = [i * j for i, j in zip(X, y)]
-
-table = [[i, j, k, l, m] for i, j, k, l, m in zip(x, y, X, x2, xy)]
-
-print(tabulate(table, headers=["Year", "Prod", "X=x-2014", "X^2", "xy"], tablefmt="grid"))
-
-
-
-n=len(x)
-b=(n*sum(xy)-sum(y)*sum(X))/(n*sum(x2)-(sum(X)**2))
-a=(sum(y)-b*sum(X))/n
-print("a,b",a,b)
-l=[]
-for i in range(n):
-  l.append(a+b*X[i])
-print(l)
-print("Trend Equation : y=%d+%.2fx"%(a,b))
-import matplotlib.pyplot as plt
-plt.title("Linear Trend Graph")
-plt.xlabel("Year")
-plt.ylabel("Production")
-plt.plot(x,l)
-# print("Trend Equation : y=%d+%.2fx"%(a,b))
+linear_model = LinearRegression()
+linear_model.fit(X, y)
+df['Linear_Trend'] = linear_model.predict(X)
+plt.figure(figsize=(10, 6))
+plt.plot(df['DATE'], df['PRCP'], label='Original Data', color='blue')  
+plt.plot(df['DATE'], df['Linear_Trend'], color='yellow', label='Linear Trend')
+plt.title('Linear Trend Estimation')
+plt.xlabel('Date')
+plt.ylabel('Precipitation')
+plt.legend()
+plt.grid(True)
+plt.show()
 ```
 
 B- POLYNOMIAL TREND ESTIMATION
 ```
 ## Polynomial TRend EStimation 4th degree
-
-import numpy as np
-from tabulate import tabulate
-# x = list(map(int, input("Enter a list of years").split()))
-# y = list(map(int, input("Enter a list of observation").split()))
-x = [2011,2012,2013,2014,2015,2016]
-y = [100,107,128,140,181,192]
-X = [2*(i-(sum(x)/len(x))) for i in x]
-print(X)
-x2 = [i ** 2 for i in X]
-xy = [i * j for i, j in zip(X, y)]
-x3 = [i ** 3 for i in X]
-x4 = [i ** 4 for i in X]
-x2y=[i*j for i,j in zip(x2,y)]
-
-table = [[i, j, k, l, m,n,o,p] for i, j, k, l, m,n,o,p in zip(x, y, X, x2, x3,x4,xy,x2y)]
-
-print(tabulate(table, headers=["Year", "Prod", "X=x-2013", "X^2", "X^3","X^4","xy","x2y"], tablefmt="grid"))
-coeff=[[len(X),sum(X)],[sum(X),sum(x2)]]
-
-coeff=[[len(x),sum(X),sum(x2)],[sum(X),sum(x2),sum(x3)],[sum(x2),sum(x3),sum(x4)]]
-Y=[sum(y),sum(xy),sum(x2y)]
-A=np.array(coeff)
-B=np.array(Y)
-try:
-  solution=np.linalg.solve(A,B)
-  # print(solution)
-except:
-  print("error")
-a,b,c=solution
-# print(a,b,c)
-print("Polynomial trend equation y=%.2f+%0.2fx+%.2fx^2"%(a,b,c))
+poly_features = PolynomialFeatures(degree=2)
+X_poly = poly_features.fit_transform(X)
+poly_model = LinearRegression()
+poly_model.fit(X_poly, y)
+df['Polynomial_Trend'] = poly_model.predict(X_poly)
+plt.figure(figsize=(10, 6))
+plt.plot(df['DATE'], df['PRCP'], label='Original Data', color='blue')  # Changed 'PRCP' to the target variable
+plt.plot(df['DATE'], df['Polynomial_Trend'], color='green', label='Polynomial Trend (Degree 2)')
+plt.title('Polynomial Trend Estimation')
+plt.xlabel('Date')
+plt.ylabel('Precipitation')
+plt.legend()
+plt.grid(True)
+plt.show()
 ```
 
 ### OUTPUT
 A - LINEAR TREND ESTIMATION
-![307501574-962fa5f0-dbab-420c-bbab-25bdda3b3f81 (1)](https://github.com/user-attachments/assets/3e1dd736-87c9-4b16-8d0d-3a0a3ff5429f)
+![image](https://github.com/user-attachments/assets/0db73474-7a0d-468a-97dc-f024919214b9)
+
 
 B- POLYNOMIAL TREND ESTIMATION
-![307501600-c84d4cfa-4f56-421b-816a-cc077be00901 (1)](https://github.com/user-attachments/assets/dbae8603-7523-4db1-a129-178c25ec473f)
+![image](https://github.com/user-attachments/assets/8fd6bfd6-1e84-4983-b1aa-8e2380499122)
+
 
 ### RESULT:
 Thus the python program for linear and Polynomial Trend Estiamtion has been executed successfully.
