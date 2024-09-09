@@ -1,6 +1,13 @@
 # Ex.No: 02 LINEAR AND POLYNOMIAL TREND ESTIMATION
 Developed by:Mathiyazhagan A
+
+
 Reg no:212222240063
+
+
+
+
+
 Date:23.08.24
 ### AIM:
 To Implement Linear and Polynomial Trend Estiamtion Using Python.
